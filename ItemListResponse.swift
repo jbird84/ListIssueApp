@@ -11,5 +11,5 @@ import Foundation
 struct ItemListResponse: Codable, Identifiable {
     var id = UUID()
     let item: String
-    let saved: Bool
+    var saved: Bool
 }

@@ -38,10 +38,29 @@ class ItemListViewModel: ObservableObject {
         ]
         myItems = items
         }
-    
+
+    func saveOrUnsaveTapped(for item: ItemListResponse) {
+        // We need a Task here since the two functions are async. But they probably don't need to be, at least as they are currently written, and then we could delete the Task. See note below.
+        Task {
+            if item.saved {
+                await unSaveItem(item)
+            } else {
+                await saveItem(item)
+            }
+        }
+    }
+
     //NOTE: Save and Unsave Item are commented out but the is the REAL code used in my BIGGER app. Just using this for placeholders for this point.
-    
-    func saveItem() async {
+
+    // These functions don't need to be async because they are not doing any async work themselves. They are just calling out to a Task to do the async work.
+    func saveItem(_ item: ItemListResponse) async {
+        // simulate the server doing stuff. This also shows why you might want to either change the checkmark right away on the assumption that the request will finish, or show a loading spinner in the row until the network request finishes.
+        // You might also consider adopting the swift-identified-collections repo, which would let you have an IdentifiedArrayOf<ItemListResponse>, and the following code would look like:
+        // myItems[id: item.id]?.saved = true
+        try? await Task.sleep(for: .seconds(1))
+        if let itemIndex = myItems.firstIndex(where: { $0.id == item.id }) {
+            myItems[itemIndex].saved = true
+        }
 //        status = .fetching
 //        Task {
 //            do {
@@ -59,7 +78,14 @@ class ItemListViewModel: ObservableObject {
 //        }
     }
     
-    func unSaveItem() async {
+    func unSaveItem(_ item: ItemListResponse) async {
+        // simulate the server doing stuff. This also shows why you might want to either change the checkmark right away on the assumption that the request will finish, or show a loading spinner in the row until the network request finishes.
+        // You might also consider adopting the swift-identified-collections repo, which would let you have an IdentifiedArrayOf<ItemListResponse>, and the following code would look like:
+        // myItems[id: item.id]?.saved = false
+        try? await Task.sleep(for: .seconds(1))
+        if let itemIndex = myItems.firstIndex(where: { $0.id == item.id }) {
+            myItems[itemIndex].saved = false
+        }
 //        status = .fetching
 //        Task {
 //            do {

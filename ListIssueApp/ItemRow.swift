@@ -14,16 +14,15 @@ struct ItemRow: View {
     var saveOrUnsaveItemTapped: () -> Void
     
     var body: some View {
+        // Not relevant to the demo, but I removed some spacers to tidy up the rows 😅
         HStack {
-            Spacer()
             Text(item.item)
-            Spacer()
+            Spacer(minLength: 0)
             Button {
                 saveOrUnsaveItemTapped()
             } label: {
                 Image(systemName: item.saved ? "checkmark" : "square")
             }
-        Spacer()
         }
         
     }
